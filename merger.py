@@ -15,10 +15,10 @@ st.image("prg.png", width=200)
 st.title("📊 Excel Tools")
 
 # === Tabs ===
-tab3, tab2, tab1 = st.tabs([
+tab3, tab1, tab2 = st.tabs([
     "🛠 Convert XLS ➜ XLSX",
-    "🔁 Match & Merge Two Files by Reference",
-    "📦 Merge Multiple Excel Files"
+    "📦 Merge Multiple Excel Files",
+    "🔁 Match & Merge Two Files by Reference"
 ])
 
 # === Tab 3: XLS to XLSX Converter ===
