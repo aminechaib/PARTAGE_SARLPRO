@@ -95,7 +95,7 @@ with tab1:
 # === Tab 2: Match & Merge ===
 with tab2:
     st.header("🔁 Match & Merge Two Files Based on Reference")
-    file1 = st.file_uploader("📁 Upload File 1 (Main Table 'reference dispo')", type=["xlsx"], key="file1")
+    file1 = st.file_uploader("📁 Upload File 1 (Main Table) 'reference dispo'", type=["xlsx"], key="file1")
     file2 = st.file_uploader("📁 Upload File 2 (Source Data)", type=["xlsx"], key="file2")
 
     if file1 and file2:
