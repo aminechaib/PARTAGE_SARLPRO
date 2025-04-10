@@ -22,6 +22,40 @@ tab3, tab2, tab1 = st.tabs([
     "🛠 Convert XLS ➜ XLSX"
 ])
 
+# === Tab 3: XLS to XLSX Converter ===
+with tab3:
+    st.header("🛠 Convert `.xls` ➜ `.xlsx`")
+    xls_files = st.file_uploader("📁 Upload `.xls` files (older Excel format)", type=["xls"], accept_multiple_files=True)
+
+    if xls_files:
+        converted_files = []
+        for xls_file in xls_files:
+            try:
+                df = pd.read_excel(xls_file, engine="xlrd")
+                output = BytesIO()
+                df.to_excel(output, index=False, engine='openpyxl')
+                output.seek(0)
+                converted_files.append((xls_file.name.replace(".xls", ".xlsx"), output))
+                st.success(f"✅ Converted: {xls_file.name}")
+            except Exception as e:
+                st.error(f"❌ Failed to convert {xls_file.name}: {e}")
+
+        if converted_files:
+            zip_buffer = BytesIO()
+            with zipfile.ZipFile(zip_buffer, "w") as zipf:
+                for filename, file_data in converted_files:
+                    zipf.writestr(filename, file_data.read())
+            zip_buffer.seek(0)
+
+            st.download_button(
+                label="⬇️ Download All Converted Files (ZIP)",
+                data=zip_buffer,
+                file_name="converted_xlsx_files.zip",
+                mime="application/zip"
+            )
+    else:
+        st.info("📌 Upload one or more `.xls` files to convert them to `.xlsx`.")
+
 # === Tab 1: Merge ===
 with tab1:
     st.header("📦 Merge Multiple .xlsx Files")
@@ -128,36 +162,3 @@ with tab2:
         except Exception as e:
             st.error(f"❌ Failed to read files: {str(e)}")
 
-# === Tab 3: XLS to XLSX Converter ===
-with tab3:
-    st.header("🛠 Convert `.xls` ➜ `.xlsx`")
-    xls_files = st.file_uploader("📁 Upload `.xls` files (older Excel format)", type=["xls"], accept_multiple_files=True)
-
-    if xls_files:
-        converted_files = []
-        for xls_file in xls_files:
-            try:
-                df = pd.read_excel(xls_file, engine="xlrd")
-                output = BytesIO()
-                df.to_excel(output, index=False, engine='openpyxl')
-                output.seek(0)
-                converted_files.append((xls_file.name.replace(".xls", ".xlsx"), output))
-                st.success(f"✅ Converted: {xls_file.name}")
-            except Exception as e:
-                st.error(f"❌ Failed to convert {xls_file.name}: {e}")
-
-        if converted_files:
-            zip_buffer = BytesIO()
-            with zipfile.ZipFile(zip_buffer, "w") as zipf:
-                for filename, file_data in converted_files:
-                    zipf.writestr(filename, file_data.read())
-            zip_buffer.seek(0)
-
-            st.download_button(
-                label="⬇️ Download All Converted Files (ZIP)",
-                data=zip_buffer,
-                file_name="converted_xlsx_files.zip",
-                mime="application/zip"
-            )
-    else:
-        st.info("📌 Upload one or more `.xls` files to convert them to `.xlsx`.")
