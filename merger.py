@@ -17,9 +17,9 @@ st.caption("One dashboard to merge, match, and convert Excel files.")
 
 # === Tabs ===
 tab3, tab2, tab1 = st.tabs([
-    "📦 Merge Multiple Excel Files",
+    "🛠 Convert XLS ➜ XLSX",
     "🔁 Match & Merge Two Files by Reference",
-    "🛠 Convert XLS ➜ XLSX"
+    "📦 Merge Multiple Excel Files"
 ])
 
 # === Tab 3: XLS to XLSX Converter ===
