@@ -6,13 +6,13 @@ import zipfile
 
 # --- Page Setup ---
 st.set_page_config(
-    page_title="Excel Tools Hub",
+    page_title="Excel Tools",
     page_icon="fav.png",
     layout="wide"
 )
 
 st.image("prg.png", width=200)
-st.title("📊 Excel Tools Hub")
+st.title("📊 Excel Tools")
 st.caption("One dashboard to merge, match, and convert Excel files.")
 
 # === Tabs ===
