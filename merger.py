@@ -12,7 +12,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.image("prg.png", width=80)
+st.image("prg.png", width=800)
 st.title("📊 Excel Data Merger")
 st.markdown("Match references and fill quantities with ease. Upload files or process multiple `.xls` files at once.")
 
