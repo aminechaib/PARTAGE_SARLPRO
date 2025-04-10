@@ -11,12 +11,12 @@ st.set_page_config(
     layout="wide"
 )
 
-st.image("prg.png", width=80)
+st.image("prg.png", width=200)
 st.title("📊 Excel Tools Hub")
 st.caption("One dashboard to merge, match, and convert Excel files.")
 
 # === Tabs ===
-tab1, tab2, tab3 = st.tabs([
+tab3, tab2, tab1 = st.tabs([
     "📦 Merge Multiple Excel Files",
     "🔁 Match & Merge Two Files by Reference",
     "🛠 Convert XLS ➜ XLSX"
