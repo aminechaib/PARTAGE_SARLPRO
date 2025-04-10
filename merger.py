@@ -13,7 +13,6 @@ st.set_page_config(
 
 st.image("prg.png", width=200)
 st.title("📊 Excel Tools")
-st.caption("One dashboard to merge, match, and convert Excel files.")
 
 # === Tabs ===
 tab3, tab2, tab1 = st.tabs([
