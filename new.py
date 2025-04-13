@@ -1,9 +1,4 @@
-import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from io import BytesIO
+import streamlit as st import pandas as pd import numpy as np import matplotlib.pyplot as plt import seaborn as sns from io import BytesIO
 
 st.set_page_config(layout="wide") st.title("Smart Order Dispatcher")
 
@@ -67,11 +62,10 @@ with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
     merged_df.to_excel(writer, index=False, sheet_name="Allocation")
     client_satisfaction.to_excel(writer, index=False, sheet_name="ClientSatisfaction")
     product_fulfillment.to_excel(writer, index=False, sheet_name="ProductFulfillment")
-    writer.save()
-    st.download_button(label="Download Excel File",
-                       data=output.getvalue(),
-                       file_name="dispatch_results.xlsx",
-                       mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+st.download_button(label="Download Excel File",
+                   data=output.getvalue(),
+                   file_name="dispatch_results.xlsx",
+                   mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 else: st.info("Please upload both files to proceed.")
 
