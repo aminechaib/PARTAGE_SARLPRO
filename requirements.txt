@@ -7,3 +7,4 @@ matplotlib
 seaborn
 numpy
 Pillow
+streamlit-option-menu

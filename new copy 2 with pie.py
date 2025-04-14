@@ -1,46 +1,3 @@
-from streamlit_option_menu import option_menu
-
-# Language dictionary
-translations = {
-    "en": {
-        "title": "📦 Client Dispatch and Satisfaction Dashboard",
-        "upload_orders": "Upload Orders File",
-        "upload_stock": "Upload Stock File",
-        "choose_client": "Choose Client",
-        "edit_quantities": "✍️ Adjust Quantities for a Client",
-        "dispatch_summary": "📋 Dispatch Summary",
-        "satisfaction_chart": "📊 Client Satisfaction Overview",
-        "fulfillment_pie": "🥧 Overall Fulfillment",
-        "audit": "🧮 Stock vs Demand Audit",
-        "download_report": "📥 Download Report",
-        "success": "✅ Files loaded successfully!",
-        "warning": "📂 Please upload both Orders and Stock files to continue.",
-        "error": "❌ Error loading files"
-    },
-    "fr": {
-        "title": "📦 Tableau de Répartition et Satisfaction Client",
-        "upload_orders": "Télécharger le fichier de commandes",
-        "upload_stock": "Télécharger le fichier de stock",
-        "choose_client": "Choisir le client",
-        "edit_quantities": "✍️ Ajuster les quantités pour un client",
-        "dispatch_summary": "📋 Résumé de la répartition",
-        "satisfaction_chart": "📊 Vue de satisfaction client",
-        "fulfillment_pie": "🥧 Taux de satisfaction global",
-        "audit": "🧮 Audit de stock vs demande",
-        "download_report": "📥 Télécharger le rapport",
-        "success": "✅ Fichiers chargés avec succès !",
-        "warning": "📂 Veuillez télécharger les fichiers de commandes et de stock.",
-        "error": "❌ Erreur lors du chargement des fichiers"
-    }
-}
-
-# Select language
-lang = option_menu(None, ["🇬🇧 English", "🇫🇷 Français"], orientation="horizontal")
-lang_code = "en" if "English" in lang else "fr"
-
-T = translations[lang_code]
-
-
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -48,15 +5,7 @@ import seaborn as sns
 from io import BytesIO
 
 st.set_page_config(page_title="Client Dispatch Assistant", layout="wide")
-st.set_page_config(
-    page_title="Client Dispatch Assistant",
-    layout="wide",
-    page_icon="fav.png"  # 🧷 Add favicon here
-)
-
-# Optional: Show logo at the top
-st.image("prg.png", width=250)
-
+st.title("📦 Client Dispatch and Satisfaction Dashboard")
 
 # Upload Excel files
 st.sidebar.header("📁 Upload Files")
