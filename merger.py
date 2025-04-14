@@ -15,10 +15,11 @@ st.image("prg.png", width=200)
 st.title("📊 Excel Tools")
 
 # === Tabs ===
-tab3, tab1, tab2 = st.tabs([
+tab3, tab1, tab2,tab4 = st.tabs([
     "🛠 Convert XLS ➜ XLSX",
     "📦 Merge Multiple Excel Files",
-    "🔁 Match & Merge Two Files by Reference"
+    "🔁 Match & Merge Two Files by Reference",
+    "🏷️ Barcode Generator"
 ])
 
 # === Tab 3: XLS to XLSX Converter ===
@@ -161,3 +162,43 @@ with tab2:
         except Exception as e:
             st.error(f"❌ Failed to read files: {str(e)}")
 
+# === Tab 4: Barcode Generator ===
+with tab4:
+    st.header("🏷️ Generate Barcodes from Excel File")
+    barcode_file = st.file_uploader("📁 Upload Excel file with barcode numbers", type=["xlsx"], key="barcode_file")
+
+    if barcode_file:
+        try:
+            df = pd.read_excel(barcode_file)
+            barcode_column = st.selectbox("🔍 Select the column containing barcode numbers", df.columns)
+
+            if st.button("🎯 Generate Barcode Images"):
+                import barcode
+                from barcode.writer import ImageWriter
+
+                zip_buffer = BytesIO()
+                with zipfile.ZipFile(zip_buffer, "w") as zipf:
+                    for index, row in df.iterrows():
+                        code = str(row[barcode_column])
+                        try:
+                            barcode_class = barcode.get_barcode_class('ean13')
+                            barcode_obj = barcode_class(code, writer=ImageWriter())
+                            img_buffer = BytesIO()
+                            barcode_obj.write(img_buffer)
+                            img_buffer.seek(0)
+                            zipf.writestr(f"{code}.png", img_buffer.read())
+                        except Exception as e:
+                            st.warning(f"⚠️ Skipped invalid barcode: {code} - {e}")
+
+                zip_buffer.seek(0)
+                st.success("✅ Barcode images generated successfully!")
+
+                st.download_button(
+                    label="⬇️ Download All Barcodes (ZIP)",
+                    data=zip_buffer,
+                    file_name="barcodes.zip",
+                    mime="application/zip"
+                )
+
+        except Exception as e:
+            st.error(f"❌ Failed to process the Excel file: {str(e)}")
