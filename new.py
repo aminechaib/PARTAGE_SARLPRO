@@ -1,19 +1,21 @@
 import streamlit as st
+
+# ✅ MUST be first Streamlit command
+st.set_page_config(
+    page_title="Client Dispatch Assistant",
+    layout="wide",
+    page_icon="fav.png"
+)
+
+# Other imports
+from streamlit_option_menu import option_menu
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from io import BytesIO
-from streamlit_option_menu import option_menu
 
-# Set app config
-st.set_page_config(
-    page_title="Client Dispatch Assistant",
-    layout="wide",
-    page_icon="fav.png"  # Favicon
-)
-
-# Show app logo
-st.image("prg.png", width=200)
+# Show logo
+st.image("prg.png", width=250)
 
 # Language translations
 translations = {
