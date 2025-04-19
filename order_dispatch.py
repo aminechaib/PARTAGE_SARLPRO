@@ -9,7 +9,7 @@ from streamlit_option_menu import option_menu
 st.set_page_config(page_title="Client Dispatch Assistant", layout="wide", page_icon="fav.png")
 
 # Logo
-st.image("logo.png", width=250)
+st.image("prg.png", width=250)
 
 # Language support
 def get_translations():
