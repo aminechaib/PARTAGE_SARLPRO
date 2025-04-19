@@ -131,6 +131,9 @@ if orders_file and stock_file:
         # 💯 Satisfaction (Boosted for VIPs)
         merged_df["Satisfaction (%)"] = round((merged_df["To_Give"] / merged_df["Ordered_Qty"]) * 100, 2).fillna(0)
 
+        # Ensure To_Give does not exceed Ordered_Qty
+        merged_df["To_Give"] = merged_df.apply(lambda row: min(row["To_Give"], row["Ordered_Qty"]), axis=1)
+
         # Increase Satisfaction for VIPs
         merged_df["Satisfaction (%)"] = np.where(merged_df["VIP"] == 1, merged_df["Satisfaction (%)"] + 10, merged_df["Satisfaction (%)"])
 
