@@ -6,10 +6,10 @@ from io import BytesIO
 from streamlit_option_menu import option_menu
 
 # Set page config
-st.set_page_config(page_title="Client Dispatch Assistant", layout="wide", page_icon="fav.png")
+st.set_page_config(page_title="Client Dispatch Assistant", layout="wide", page_icon="static/fav.png")
 
 # Logo
-st.image("prg.png", width=250)
+st.image("static/prg.png", width=250)
 
 # Language support
 def get_translations():
