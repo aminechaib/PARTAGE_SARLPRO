@@ -72,7 +72,7 @@ if orders_file and stock_file:
             vip_group = group[group["VIP"] == 1].copy()
             regular_group = group[group["VIP"] == 0].copy()
 
-            def allocate(group, stock_left):
+            def allocate(group, stock_left, vip_boost=0):
                 total_ordered = group["Ordered_Qty"].sum()
                 if total_ordered == 0 or stock_left == 0:
                     return [0] * len(group), 0
@@ -80,7 +80,7 @@ if orders_file and stock_file:
                 alloc = []
                 for _, row in group.iterrows():
                     proportional = (row["Ordered_Qty"] / total_ordered) * stock_left
-                    to_give = min(row["Ordered_Qty"], int(round(proportional)))
+                    to_give = min(row["Ordered_Qty"], int(round(proportional))) + vip_boost
                     alloc.append(to_give)
 
                 # Adjust if overallocated
@@ -92,7 +92,8 @@ if orders_file and stock_file:
                                 break
                 return alloc, sum(alloc)
 
-            vip_alloc, vip_sum = allocate(vip_group, stock_qty)
+            # Boost for VIP clients to increase their To_Give priority
+            vip_alloc, vip_sum = allocate(vip_group, stock_qty, vip_boost=5)
             stock_left = stock_qty - vip_sum
             reg_alloc, _ = allocate(regular_group, stock_left)
 
@@ -127,8 +128,11 @@ if orders_file and stock_file:
             idx = client_data.index[i]
             merged_df.at[idx, "To_Give"] = row["To_Give"]
 
-        # 💯 Satisfaction
+        # 💯 Satisfaction (Boosted for VIPs)
         merged_df["Satisfaction (%)"] = round((merged_df["To_Give"] / merged_df["Ordered_Qty"]) * 100, 2).fillna(0)
+
+        # Increase Satisfaction for VIPs
+        merged_df["Satisfaction (%)"] = np.where(merged_df["VIP"] == 1, merged_df["Satisfaction (%)"] + 10, merged_df["Satisfaction (%)"])
 
         st.subheader("📋 Dispatch Summary")
         st.dataframe(merged_df)
