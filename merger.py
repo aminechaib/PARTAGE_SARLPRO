@@ -15,11 +15,13 @@ st.image("prg.png", width=200)
 st.title("📊 Excel Tools")
 
 # === Tabs ===
-tab3, tab1, tab2 = st.tabs([
+tab3, tab1, tab2, tab4 = st.tabs([
     "🛠 Convert XLS ➜ XLSX",
     "📦 Merge Multiple Excel Files",
     "🔁 Match & Merge Two Files by Reference",
+    "📊 Pivot-style Merger (Group & Aggregate)"
 ])
+
 
 # === Tab 3: XLS to XLSX Converter ===
 with tab3:
@@ -160,4 +162,62 @@ with tab2:
                     st.error(f"⚠️ Error during processing: {str(e)}")
         except Exception as e:
             st.error(f"❌ Failed to read files: {str(e)}")
+with tab4:
+    st.header("📊 Pivot-style Merger (Group & Aggregate)")
 
+    pivot_files = st.file_uploader("📁 Upload Excel files to group and aggregate", type=["xlsx"], accept_multiple_files=True, key="pivot")
+
+    if pivot_files:
+        df_list = []
+        for f in pivot_files:
+            try:
+                df = pd.read_excel(f)
+                df['source_file'] = f.name
+                df_list.append(df)
+            except Exception as e:
+                st.error(f"❌ Error reading {f.name}: {e}")
+
+        if df_list:
+            merged = pd.concat(df_list, ignore_index=True)
+            st.success("✅ Files loaded and merged successfully.")
+            st.subheader("🔍 Preview of Combined Data")
+            st.dataframe(merged.head(10), use_container_width=True)
+
+            all_columns = merged.columns.tolist()
+            numeric_cols = merged.select_dtypes(include=['number']).columns.tolist()
+
+            group_cols = st.multiselect("🔗 Group By Columns", all_columns)
+            agg_options = ["sum", "mean", "count", "max", "min"]
+
+            agg_config = {}
+            st.subheader("🔣 Choose Aggregations")
+
+            for col in numeric_cols:
+                agg_choice = st.selectbox(f"📌 Aggregate `{col}` by:", ["(skip)"] + agg_options, key=col)
+                if agg_choice != "(skip)":
+                    agg_config[col] = agg_choice
+
+            if group_cols and agg_config and st.button("🔄 Run Aggregation"):
+                try:
+                    grouped = merged.groupby(group_cols).agg(agg_config).reset_index()
+                    st.success("✅ Aggregation completed!")
+
+                    st.subheader("📋 Aggregated Result")
+                    st.dataframe(grouped, use_container_width=True)
+
+                    output = BytesIO()
+                    grouped.to_excel(output, index=False, engine='openpyxl')
+                    output.seek(0)
+
+                    st.download_button(
+                        label="⬇️ Download Aggregated Excel",
+                        data=output,
+                        file_name="pivot_aggregated.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
+                except Exception as e:
+                    st.error(f"⚠️ Aggregation error: {str(e)}")
+            else:
+                st.info("ℹ️ Please select group and aggregation columns.")
+    else:
+        st.info("📂 Upload `.xlsx` files to begin.")
